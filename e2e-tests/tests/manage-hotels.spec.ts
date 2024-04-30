@@ -47,3 +47,4 @@ test("should allow user to add a hotel", async ({page}) => {
     await page.getByRole('button', { name : "Save"}).click();
     await expect(page.getByText("Hotel Saved!")).toBeVisible();
 })
+

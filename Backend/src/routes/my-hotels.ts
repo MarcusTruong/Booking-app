@@ -1,19 +1,20 @@
-import express, { Request, Response} from 'express';
-import multer from 'multer';
+import express, { Request, Response } from "express";
+import multer from "multer";
 import cloudinary from "cloudinary";
-import Hotel, { HotelType } from '../models/hotels';
-import verifyToken from '../middleware/auth';
-import { body } from 'express-validator';
+import Hotel from "../models/hotels";
+import { HotelType } from "../shared/types"
+import verifyToken from "../middleware/auth";
+import { body } from "express-validator";
 
 const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB
-    }
-})
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+});
 
 router.post(
   "/",
@@ -24,9 +25,14 @@ router.post(
     body("country").notEmpty().withMessage("Country is required"),
     body("description").notEmpty().withMessage("Description is required"),
     body("type").notEmpty().withMessage("Hotel Type is required"),
-    body("pricePerNight").notEmpty().isNumeric().withMessage("Price per Night is required and must be a number"),
-    body("facilities").notEmpty().isArray().withMessage("Facilities are required"),
-
+    body("pricePerNight")
+      .notEmpty()
+      .isNumeric()
+      .withMessage("Price per Night is required and must be a number"),
+    body("facilities")
+      .notEmpty()
+      .isArray()
+      .withMessage("Facilities are required"),
   ],
   upload.array("imageFiles", 6),
   async (req: Request, res: Response) => {
@@ -59,5 +65,14 @@ router.post(
     }
   }
 );
+
+router.get("/", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotels = await Hotel.find({ userId: req.userId });
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching hotels" });
+  }
+});
 
 export default router;
