@@ -12,10 +12,13 @@ import { useAppContext } from "./contexts/AppContext";
 import MyHotels from "./pages/MyHotels";
 import EditHotel from "./pages/EditHotel";
 import Search from "./pages/Search";
+import Detail from "./pages/Detail";
+import Booking from "./pages/Booking";
+// import MyBookings from "./pages/MyBookings";
 import Home from "./pages/Home";
 
 const App = () => {
-  const {isLoggedIn} = useAppContext();
+  const { isLoggedIn } = useAppContext();
   return (
     <Router>
       <Routes>
@@ -26,62 +29,86 @@ const App = () => {
               <Home />
             </Layout>
           }
-        ></Route>
+        />
         <Route
           path="/search"
           element={
             <Layout>
-              <Search></Search>
+              <Search />
             </Layout>
           }
-        ></Route>
-
+        />
+        <Route
+          path="/detail/:hotelId"
+          element={
+            <Layout>
+              <Detail />
+            </Layout>
+          }
+        />
         <Route
           path="/register"
           element={
             <Layout>
-              <Register></Register>
+              <Register />
             </Layout>
           }
-        ></Route>
-
+        />
         <Route
           path="/sign-in"
           element={
             <Layout>
-              <SignIn></SignIn>
+              <SignIn />
             </Layout>
           }
-        ></Route>
+        />
+
         {isLoggedIn && (
           <>
+            <Route
+              path="/hotel/:hotelId/booking"
+              element={
+                <Layout>
+                  <Booking />
+                </Layout>
+              }
+            />
+
             <Route
               path="/add-hotel"
               element={
                 <Layout>
-                  <AddHotel></AddHotel>
+                  <AddHotel />
                 </Layout>
               }
-            ></Route>
-            <Route
-              path="/my-hotels"
-              element={
-                <Layout>
-                  <MyHotels></MyHotels>
-                </Layout>
-              }
-            ></Route>
+            />
             <Route
               path="/edit-hotel/:hotelId"
               element={
                 <Layout>
-                  <EditHotel></EditHotel>
+                  <EditHotel />
                 </Layout>
               }
-            ></Route>
+            />
+            <Route
+              path="/my-hotels"
+              element={
+                <Layout>
+                  <MyHotels />
+                </Layout>
+              }
+            />
+            {/* <Route
+              path="/my-bookings"
+              element={
+                <Layout>
+                  <MyBookings />
+                </Layout>
+              }
+            /> */}
           </>
         )}
-        <Route path="*" element={<Navigate to="/"></Navigate>}></Route>
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
