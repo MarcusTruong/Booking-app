@@ -6,11 +6,12 @@ import {
   PaymentIntentResponse,
   UserType,
 } from "../../backend/src/shared/types";
+
 import { BookingFormData } from "./forms/BookingForm/BookingForm";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
-
 export const fetchCurrentUser = async (): Promise<UserType> => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+    method: "GET",
     credentials: "include",
   });
   if (!response.ok) {
@@ -27,7 +28,9 @@ export const register = async (formData: RegisterFormData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
-  });
+  }
+
+);
 
   const responseBody = await response.json();
 
@@ -50,10 +53,13 @@ export const signIn = async (formData: SignInFormData) => {
   if (!response.ok) {
     throw new Error(body.message);
   }
+  console.log(formData);
   return body;
 };
 
 export const validateToken = async () => {
+  console.log("val")
+
   const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
     credentials: "include",
   });

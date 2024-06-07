@@ -36,6 +36,7 @@ const Booking = () => {
       enabled: !!hotelId && numberOfNights > 0,
     }
   );
+  console.log(paymentIntentData);
 
   const { data: hotel } = useQuery(
     "fetchHotelByID",
@@ -44,7 +45,7 @@ const Booking = () => {
       enabled: !!hotelId,
     }
   );
-
+  
   const { data: currentUser } = useQuery(
     "fetchCurrentUser",
     apiClient.fetchCurrentUser
@@ -53,7 +54,6 @@ const Booking = () => {
   if (!hotel) {
     return <></>;
   }
-
   return (
     <div className="grid md:grid-cols-[1fr_2fr]">
       <BookingDetailsSummary
