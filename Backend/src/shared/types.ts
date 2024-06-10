@@ -1,9 +1,11 @@
 export type UserType = {
-  _id: string;
+  _id: any;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
+  location?: string;
+  about?: string;
 };
 
 export type HotelType = {

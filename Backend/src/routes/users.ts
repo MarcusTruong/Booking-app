@@ -20,6 +20,34 @@ router.get("/me", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+router.put("/:userId", verifyToken, async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const userData = req.body;
+  console.log("Received data:", userData, "for userId:", userId);
+
+  if (userId !== req.userId) {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized to update this user" });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, userData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log("Updated user:", user);
+    res.json(user);
+  } catch (error) {
+    console.log("Error updating user:", error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
 router.post(
   "/register",
   [

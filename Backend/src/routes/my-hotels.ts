@@ -16,6 +16,7 @@ const upload = multer({
   },
 });
 
+// POST endpoint to add a hotel
 router.post(
   "/",
   verifyToken,
@@ -57,6 +58,7 @@ router.post(
   }
 );
 
+// GET endpoint to fetch all hotels
 router.get("/", verifyToken, async (req: Request, res: Response) => {
   try {
     const hotels = await Hotel.find({ userId: req.userId });
@@ -66,6 +68,7 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+// GET endpoint to fetch a hotel by ID
 router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   const id = req.params.id.toString();
   try {
@@ -79,6 +82,7 @@ router.get("/:id", verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+// PUT endpoint to update a hotel by ID
 router.put(
   "/:hotelId",
   verifyToken,
@@ -112,11 +116,30 @@ router.put(
       await hotel.save();
       res.status(201).json(hotel);
     } catch (error) {
-      res.status(500).json({ message: "Something went throw" });
+      res.status(500).json({ message: "Something went wrong" });
     }
   }
 );
 
+// DELETE endpoint to remove a hotel by ID
+router.delete("/:hotelId", verifyToken, async (req: Request, res: Response) => {
+  try {
+    const hotel = await Hotel.findOneAndDelete({
+      _id: req.params.hotelId,
+      userId: req.userId,
+    });
+
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+
+    res.status(200).json({ message: "Hotel removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to remove hotel" });
+  }
+});
+
+// Function to upload images to Cloudinary
 async function uploadImages(imageFiles: Express.Multer.File[]) {
   const uploadPromises = imageFiles.map(async (image) => {
     const b64 = Buffer.from(image.buffer).toString("base64");

@@ -7,6 +7,7 @@ import {
   UserType,
 } from "../../backend/src/shared/types";
 
+
 import { BookingFormData } from "./forms/BookingForm/BookingForm";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 export const fetchCurrentUser = async (): Promise<UserType> => {
@@ -19,6 +20,31 @@ export const fetchCurrentUser = async (): Promise<UserType> => {
   }
   return response.json();
 };
+
+export const updateUserInformation = async ({
+  userId,
+  userData,
+}: {
+  userId: string;
+  userData: Partial<UserType>;
+}): Promise<UserType> => {
+  console.log("Updating user:", userId, userData);
+  const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  console.log("Request payload:", JSON.stringify(userData));
+  console.log("Response:", response);
+  if (!response.ok) {
+    throw new Error("Error updating user information");
+  }
+  return response.json();
+};
+
 
 export const register = async (formData: RegisterFormData) => {
   const response = await fetch(`${API_BASE_URL}/api/users/register`, {
@@ -58,8 +84,6 @@ export const signIn = async (formData: SignInFormData) => {
 };
 
 export const validateToken = async () => {
-  console.log("val")
-
   const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
     credentials: "include",
   });
@@ -95,6 +119,21 @@ export const addMyHotel = async (hotelFormData: FormData) => {
 
   return response.json();
 };
+
+export const removeMyHotelById = async (hotelId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete hotel");
+  }
+
+  return response.json();
+};
+
+
 
 export const fetchMyHotels = async (): Promise<HotelType[]> => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
