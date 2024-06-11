@@ -76,7 +76,7 @@ const App = () => {
               }
             />
             <Route
-              path="/my-information/:userId"
+              path="/my-information"
               element={
                 <Layout>
                   <Information></Information>

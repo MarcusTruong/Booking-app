@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 export type UserType = {
   _id: any;
   email: string;
@@ -13,6 +14,7 @@ export type UserType = {
 };
 
 const EditInformation = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { showToast } = useAppContext();
   const {
@@ -37,6 +39,7 @@ const EditInformation = () => {
         message: "Information updated successfully!",
         type: "SUCCESS",
       });
+      navigate("/my-information");
     },
     onError: (error: Error) => {
       showToast({ message: error.message, type: "ERROR" });

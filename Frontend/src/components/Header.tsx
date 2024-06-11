@@ -3,14 +3,10 @@ import { useAppContext } from "../contexts/AppContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import SignOutButton from "./SignOutButton";
-import { useQuery } from "react-query";
-import * as apiClient from "../api-client";
+
 
 const Header = () => {
   const { isLoggedIn } = useAppContext();
-  const {
-    data: currentUser,
-  } = useQuery("fetchCurrentUser", apiClient.fetchCurrentUser);
   return (
     <div className="bg-blue-800 py-6 ">
       <div className="container mx-auto flex justify-between">
@@ -33,7 +29,7 @@ const Header = () => {
                 My Hotels
               </Link>
               <Link
-                to={`/my-information/${currentUser?._id}`}
+                to={`/my-information`}
                 className="text-white rounded-full px-2 bg-blue-600 text-2xl text-center "
               >
                 <FontAwesomeIcon icon={faUser} />
